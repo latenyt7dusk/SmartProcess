@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nakpil.core;
+package nakpil.core.cl;
 
 /**
  *
  * @author HERU
  */
-public class Build75 {
-    
-    private String trace,tin,sname,fname,mname,rdo,address,zip,d1,d2;
-    
+public class Account73 {
     
 }

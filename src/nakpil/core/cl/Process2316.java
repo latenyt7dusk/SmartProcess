@@ -3,12 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nakpil.core;
+package nakpil.core.cl;
 
 /**
  *
  * @author HERU
  */
-public class Build73 {
+public class Process2316 implements Runnable{
+
+    public Process2316(){
+        
+    }
+    
+    @Override
+    public void run() {
+        
+    }
     
 }

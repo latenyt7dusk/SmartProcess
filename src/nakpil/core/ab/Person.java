@@ -3,7 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nakpil.core;
+package nakpil.core.ab;
+
 
 /**
  *
@@ -11,8 +12,19 @@ package nakpil.core;
  */
 public abstract class Person {
     
+    public static final String SURNAME = "SURNAME";
+    public static final String FIRSTNAME = "FIRSTNAME";
+    public static final String MIDDLENAME = "MIDDLENAME";
+    public static final String BIRTHDATE = "BIRTHDATE";
+    public static final String GENDER = "GENDER";
+    public static final String CIVILSTATUS = "CIVILSTATUS";
+    public static final String ADDRESS = "ADDRESS";
+    public static final String CONTACT = "CONTACT";
+    public static final String EMAIL = "EMAIL";
+    
     private String sname,fname,mname;
     private String bdate,sex,status;
+    private String address,contact,email;
     
     public void setSurname(String s){
         this.sname = s;
@@ -49,5 +61,23 @@ public abstract class Person {
     }
     public String getCivilStatus(){
         return status;
+    }
+    public void setAddress(String s){
+        this.address = s;
+    }
+    public String getAddress(){
+        return address;
+    }
+    public void setContactNumber(String s){
+        this.contact = s;
+    }
+    public String getContactNumber(){
+        return contact;
+    }
+    public void setEmail(String s){
+        this.email = s;
+    }
+    public String getEmail(){
+        return email;
     }
 }
