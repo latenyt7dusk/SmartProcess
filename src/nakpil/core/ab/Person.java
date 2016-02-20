@@ -10,7 +10,7 @@ package nakpil.core.ab;
  *
  * @author HERU
  */
-public abstract class Person {
+public class Person {
     
     public static final String SURNAME = "SURNAME";
     public static final String FIRSTNAME = "FIRSTNAME";

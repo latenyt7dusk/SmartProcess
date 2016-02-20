@@ -3,15 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nakpil.core.ab;
+package nakpil.core.ab.work;
 
 /**
  *
  * @author Duskmourne
  */
-public abstract interface Employee {
+public abstract interface Job {
     
-    public static final String COMPANY = "COMPANY";
     public static final String DEPARTMENT = "DEPARTMENT";
     public static final String POSITION = "POSITION";
     public static final String MINIMUM_DAILYWAGE = "MINIMUM_DAILYWAGE";
@@ -19,10 +18,8 @@ public abstract interface Employee {
     public static final String MINIMUM_ANNUALWAGE = "MINIMUM_ANNUALWAGE";
     public static final String DATE_HIRED = "DATE_HIRED";
     public static final String DATE_SEPARATED = "DATE_SEPARATED";
-    
-    public abstract void setCompany(String s);
-    public abstract String getCompany();
-    
+    public static final String EMPLOYEMENT_STATUS = "EMPLOYMENT_STATUS";
+        
     public abstract void setDepartment(String s);
     public abstract String getDepartment();
     
@@ -43,4 +40,8 @@ public abstract interface Employee {
     
     public abstract void setDateSaparated(String s);
     public abstract String getDateSeparated();
+    
+    public abstract void setEmploymentStatus(String s);
+    public abstract String getEmploymentStatus();
+
 }

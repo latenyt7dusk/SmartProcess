@@ -12,7 +12,12 @@ package nakpil.core.ab.phil.government;
 public abstract interface BIRInformation {
     
     public static final String TIN_NUMBER = "TIN_NUMBER";
+    public static final String DISTRICT_CODE = "DISTRICT_CODE";
     
     public abstract void setTinNumber(String s);
     public abstract String getTinNumber();
+    
+    public abstract void setDistrictCode(String s);
+    public abstract String getDistrictCode();
+
 }
