@@ -20,6 +20,7 @@ public abstract interface Taxable {
     public static final String TAXABLE_OTHERSALARY = "TAXABLE_OTHERSALARY";
     public static final String TAXABLE_DEMINIMISBENEFITS = "TAXABLE_DEMINIMISBENIFITS";
     public static final String TAXABLE_13THMONTHPAY = "TAXABLE_13THMONTHPAY";
+    public static final String TAXABLE_HAZARDPAY = "TAXABLE_HAZARDPAY";
     
     public abstract void setTaxableGrossPay(String s);
     public abstract String getTaxableGrossPay();
@@ -47,6 +48,9 @@ public abstract interface Taxable {
     
     public abstract void setTaxable13thMonthPay(String s);
     public abstract String getTaxable13thMonthPay();
+    
+    public abstract void setTaxableHazardPay(String s);
+    public abstract String getTaxableHazardPay();
     //
     
     

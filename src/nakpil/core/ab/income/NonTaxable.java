@@ -20,6 +20,7 @@ public abstract interface NonTaxable {
     public static final String NONTAXABLE_OTHERSALARY = "NONTAXABLE_OTHERSALARY";
     public static final String NONTAXABLE_DEMINIMISBENEFITS = "NONTAXABLE_DEMINIMISBENIFITS";
     public static final String NONTAXABLE_13THMONTHPAY = "NONTAXABLE_13THMONTHPAY";
+    public static final String NONTAXABLE_HAZARDPAY = "NONTAXABLE_HAZARDPAY";
     
     public abstract void setNonTaxableGrossPay(String s);
     public abstract String getNonTaxableGrossPay();
@@ -47,6 +48,9 @@ public abstract interface NonTaxable {
     
     public abstract void setNonTaxable13thMonthPay(String s);
     public abstract String getNonTaxable13thMonthPay();
+    
+    public abstract void setNonTaxableHazardPay(String s);
+    public abstract String getNonTaxableHazardPay();
     //
     
 }

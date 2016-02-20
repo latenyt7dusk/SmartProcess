@@ -7,7 +7,6 @@ package nakpil.core.ab.income;
 
 import java.util.HashMap;
 import java.util.Map;
-
 /**
  *
  * @author Duskmourne
@@ -26,6 +25,7 @@ public class Income implements Taxable,NonTaxable{
             put(TAXABLE_GOVERNMENTCONTRIBUTIONS,"0");
             put(TAXABLE_DEMINIMISBENEFITS,"0");
             put(TAXABLE_13THMONTHPAY,"0");
+            put(TAXABLE_HAZARDPAY,"0");
             
             //Non-Taxable Income
             put(NONTAXABLE_GROSSPAY,"0");
@@ -37,6 +37,7 @@ public class Income implements Taxable,NonTaxable{
             put(NONTAXABLE_GOVERNMENTCONTRIBUTIONS,"0");
             put(NONTAXABLE_DEMINIMISBENEFITS,"0");
             put(NONTAXABLE_13THMONTHPAY,"0");
+            put(NONTAXABLE_HAZARDPAY,"0");
     }};
     
     public void setData(Map<String,String> data){
@@ -136,6 +137,16 @@ public class Income implements Taxable,NonTaxable{
     public String getTaxable13thMonthPay() {
         return Data.get(TAXABLE_13THMONTHPAY);
     }
+    
+    @Override
+    public void setTaxableHazardPay(String s) {
+        this.Data.put(TAXABLE_HAZARDPAY, s);
+    }
+
+    @Override
+    public String getTaxableHazardPay() {
+        return Data.get(TAXABLE_HAZARDPAY);
+    }
 
     @Override
     public void setNonTaxableGrossPay(String s) {
@@ -225,6 +236,16 @@ public class Income implements Taxable,NonTaxable{
     @Override
     public String getNonTaxable13thMonthPay() {
         return Data.get(NONTAXABLE_13THMONTHPAY);
+    }
+
+    @Override
+    public void setNonTaxableHazardPay(String s) {
+        this.Data.put(NONTAXABLE_HAZARDPAY, s);
+    }
+
+    @Override
+    public String getNonTaxableHazardPay() {
+        return Data.get(NONTAXABLE_HAZARDPAY);
     }
     
     
