@@ -5,12 +5,13 @@
  */
 package nakpil.core.cl;
 
-import nakpil.core.ab.*;
-import nakpil.core.ab.income.Income;
-import nakpil.core.ab.phil.government.BIRInformation;
-import nakpil.core.ab.work.JobInformation;
+import nakpil.government.BIRInformation;
+import nakpil.income.Income;
+import nakpil.personal.Person;
+import nakpil.work.JobInformation;
+
+
 /**
- *
  * @author HERU
  */
 public class BIRAccount extends Person implements BIRInformation {
@@ -68,5 +69,5 @@ public class BIRAccount extends Person implements BIRInformation {
     public String getDistrictCode() {
         return DistrictCode;
     }
-    
+        
 }
