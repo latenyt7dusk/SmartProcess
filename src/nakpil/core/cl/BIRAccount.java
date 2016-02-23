@@ -22,7 +22,7 @@ public class BIRAccount extends Person implements BIRInformation {
     private Income AnnualIncome;
     
     //Internal Object Variables
-    private String Schedule;
+    private String Schedule,Year;
     
     public BIRAccount(Income i,JobInformation j){
         this.AnnualIncome = i;
@@ -34,6 +34,12 @@ public class BIRAccount extends Person implements BIRInformation {
     }
     public String getSchedule(){
         return Schedule;
+    }
+    public void setScheduleYear(String s){
+        this.Year = s;
+    }
+    public String getScheduleYear(){
+        return Year;
     }
     
     public void setAnnualIncome(Income income){
