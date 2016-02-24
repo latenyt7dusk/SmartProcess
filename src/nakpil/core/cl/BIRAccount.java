@@ -5,8 +5,11 @@
  */
 package nakpil.core.cl;
 
+import java.util.ArrayList;
+import java.util.List;
 import nakpil.government.BIRInformation;
 import nakpil.income.Income;
+import nakpil.personal.Dependent;
 import nakpil.personal.Person;
 import nakpil.work.JobInformation;
 
@@ -20,6 +23,7 @@ public class BIRAccount extends Person implements BIRInformation {
     private String TinNumber,DistrictCode;
     private JobInformation MyJob;
     private Income AnnualIncome;
+    private List<Dependent> dependents = new ArrayList();
     
     //Internal Object Variables
     private String Schedule,Year;
@@ -40,6 +44,18 @@ public class BIRAccount extends Person implements BIRInformation {
     }
     public String getScheduleYear(){
         return Year;
+    }
+    
+    public void setDependents(List<Dependent> d){
+        this.dependents = d;
+    }
+    
+    public List<Dependent> getDependents(){
+        return dependents;
+    }
+    
+    public Dependent getDependent(int i){
+        return dependents.get(i);
     }
     
     public void setAnnualIncome(Income income){
