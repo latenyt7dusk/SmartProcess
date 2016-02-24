@@ -114,8 +114,20 @@ public class Data2316 {
                     temp.setText("AL49", "DEMINIMIS BENEFITS (38)");
                     temp.setText("AL54", "GOV'T CONTRIBUTIONS (39)");
                     temp.setText("AL59", "OTHER SALARY (40)");
-                } else {
-                    //Above Minimum Wager Inputs
+                    
+                } else if(myEmployee.getSchedule().contains("7.1")){
+                    
+                    //Non Taxables
+                    temp.setText("AL46", "NON-TAXABLE 13th Month Pay");
+                    temp.setText("AL49", "NON-TAXABLE DEMINIMIS");
+                    temp.setText("AL54", "NON-TAXABLE GOV'T CONTRI");
+                    temp.setText("AL59", "NON-TAXABLE OTHER SALARY");
+                    temp.setText("AL65", "NON-TAXABLE COMPENSATION INCOME");
+                    temp.setText("O107", "NON-TAXABLE COMPENSATION INCOME");
+                    temp.setText("O104", "NON-TAXABLE GROSS + TAXABLE GROSS");
+                    
+                    temp.setText("AL72", "TAXABLE BASIC");
+                    temp.setText("O110", "TAXABLE COMPENSATION INCOME");
                     
                 }
 
