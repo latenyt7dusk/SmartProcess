@@ -8,9 +8,11 @@ package nakpil.core.cl;
 import com.smartxls.WorkBook;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nakpil.income.Income;
+import nakpil.personal.Dependent;
 import nakpil.work.Employer;
 import nakpil.work.JobInformation;
 
@@ -24,21 +26,26 @@ public class Data2316 {
     private Income myIncome;
     private JobInformation JobInfo;
     private Employer myEmployer;
-    private SimpleDateFormat DateParser = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat DateParser = new SimpleDateFormat("yyyy-MM-dd");
     private Date TempDate;
     private char[] myTIN;
     private char[] eTIN;
+    private List<Dependent> Dependents;
+    private String AuthorizedPersonel = "";
 
     /**
      * @param seqID - Indicated Sequence ID of the current Account
      * @param bir - BIR 2316 Account
+     * @param personel - Authorized Assignatory Personel
      */
-    public void setBIRAccount(int seqID, BIRAccount bir) {
+    public void setBIRAccount(int seqID, BIRAccount bir,String personel) {
         this.SEQ_ID = seqID;
         this.myEmployee = bir;
         this.myIncome = myEmployee.getAnnualIncome();
         this.JobInfo = myEmployee.getJobInformation();
         this.myEmployer = JobInfo.getCompany();
+        this.Dependents = myEmployee.getDependents();
+        this.AuthorizedPersonel = personel;
     }
 
     public boolean encodeTo(WorkBook temp) {
@@ -85,15 +92,25 @@ public class Data2316 {
                 temp.setText("Q42", myEmployee.getContactNumber());
                 temp.setText(((myEmployee.getCivilStatus().equalsIgnoreCase("Single")) ? "E47" : "O47"), "x");
 
+                
                 //Dependents
-                temp.setText("B54", "Dependent 1");
-                temp.setText("S54", "Dependent 1 Birthdate");
-                temp.setText("B56", "Dependent 2");
-                temp.setText("S56", "Dependent 2 Birthdate");
-                temp.setText("B58", "Dependent 3");
-                temp.setText("S58", "Dependent 3 Birthdate");
-                temp.setText("B59", "Dependent 4");
-                temp.setText("S59", "Dependent 4 Birthdate");
+                if(Dependents.size() >= 1){
+                    temp.setText("B54", Dependents.get(0).getFullname());
+                    temp.setText("S54", formatDate(Dependents.get(0).getBirthdate(),true));
+                }
+                if(Dependents.size() >= 2){
+                    temp.setText("B56", Dependents.get(1).getFullname());
+                    temp.setText("S56", formatDate(Dependents.get(1).getBirthdate(),true));
+                }
+                if(Dependents.size() >= 3){
+                    temp.setText("B58", Dependents.get(2).getFullname());
+                    temp.setText("S58", formatDate(Dependents.get(2).getBirthdate(),true));
+                }
+                if(Dependents.size() >= 4){
+                    temp.setText("B59", Dependents.get(3).getFullname());
+                    temp.setText("S59", formatDate(Dependents.get(3).getBirthdate(),true));
+                }
+                           
 
                 //IF Minimum use this(7.5) "Do not Fill if Above minimum earner"
                 if (myEmployee.getSchedule().contains("7.5")) {
@@ -115,19 +132,29 @@ public class Data2316 {
                     temp.setText("AL54", "GOV'T CONTRIBUTIONS (39)");
                     temp.setText("AL59", "OTHER SALARY (40)");
                     
-                } else if(myEmployee.getSchedule().contains("7.1")){
+                } else if(myEmployee.getSchedule().contains("7.1") || myEmployee.getSchedule().contains("7.3")){
                     
                     //Non Taxables
-                    temp.setText("AL46", "NON-TAXABLE 13th Month Pay");
-                    temp.setText("AL49", "NON-TAXABLE DEMINIMIS");
-                    temp.setText("AL54", "NON-TAXABLE GOV'T CONTRI");
-                    temp.setText("AL59", "NON-TAXABLE OTHER SALARY");
-                    temp.setText("AL65", "NON-TAXABLE COMPENSATION INCOME");
-                    temp.setText("O107", "NON-TAXABLE COMPENSATION INCOME");
-                    temp.setText("O104", "NON-TAXABLE GROSS + TAXABLE GROSS");
+                    temp.setText("AL46", "NON-TAXABLE 13th Month Pay (37)");
+                    temp.setText("AL49", "NON-TAXABLE DEMINIMIS (38)");
+                    temp.setText("AL54", "NON-TAXABLE GOV'T CONTRI (39)");
+                    temp.setText("AL59", "NON-TAXABLE OTHER SALARY (40)");
+                    temp.setText("AL65", "NON-TAXABLE COMPENSATION INCOME (41)");
+                    temp.setText("O107", "NON-TAXABLE COMPENSATION INCOME (22)");
+                    temp.setText("O104", "NON-TAXABLE GROSS + TAXABLE GROSS (21)");
                     
-                    temp.setText("AL72", "TAXABLE BASIC");
-                    temp.setText("O110", "TAXABLE COMPENSATION INCOME");
+                    temp.setText("AL72", "TAXABLE BASIC (42)");
+                    temp.setText("O110", "TAXABLE COMPENSATION INCOME (23)");
+                    temp.setText("AL141", "TAXABLE COMPENSATION INCOME (55)");
+                    temp.setText("O116", "TAXABLE GROSS (25)");
+                    temp.setText("O119", "TAX EXCEMPTION AMOUNT (26)");
+                    temp.setText("O122", "PREMIUM HEALTH EXCEMPTION AMOUNT (27)");
+                    temp.setText("O125", "NET COMPENSATION INCOME (28)");
+                    
+                    
+                    temp.setText("O128", "EXCESS WITHHELD - OVERWITHHELD (29)");
+                    temp.setText("O132", "EXCESS WITHHELD - OVERWITHHELD (30)");
+                    temp.setText("O141", "EXCESS WITHHELD - OVERWITHHELD (31)");
                     
                 }
 
@@ -140,6 +167,9 @@ public class Data2316 {
                 temp.setText("B77", myEmployer.getName());
                 temp.setText("B82", myEmployer.getAddress());
                 temp.setText("W82", myEmployer.getZipCode());
+                
+                temp.setText("D146", AuthorizedPersonel);
+                temp.setText("C161", AuthorizedPersonel);
 
             }
             return false;
@@ -149,14 +179,7 @@ public class Data2316 {
         }
     }
 
-    public void reset(WorkBook temp) {
-        try {
-
-        } catch (Exception er) {
-            Logger.getLogger(Data2316.class.getName()).log(Level.SEVERE, null, er);
-        }
-    }
-
+    
     public String formatDate(String date, boolean full) {
         try {
             if (!date.isEmpty()) {
