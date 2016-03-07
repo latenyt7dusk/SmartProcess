@@ -21,31 +21,31 @@ import nakpil.work.JobInformation;
  */
 public class Data2316 {
 
-    private BIRAccount myEmployee;
-    private int SEQ_ID;
-    private Income myIncome;
-    private JobInformation JobInfo;
-    private Employer myEmployer;
+    private static BIRAccount myEmployee;
+    private static int SEQ_ID;
+    private static Income myIncome;
+    private static JobInformation JobInfo;
+    private static Employer myEmployer;
     private static final SimpleDateFormat DateParser = new SimpleDateFormat("yyyy-MM-dd");
-    private Date TempDate;
-    private char[] myTIN;
+    private static Date TempDate;
+    private static char[] myTIN;
     private char[] eTIN;
-    private List<Dependent> Dependents;
-    private String AuthorizedPersonel = "";
-
+    private static List<Dependent> Dependents;
+    private static String AuthorizedPersonel = "";
+    
+    
     /**
-     * @param seqID - Indicated Sequence ID of the current Account
      * @param bir - BIR 2316 Account
-     * @param personel - Authorized Assignatory Personel
+     * @param personel - Authorized Assignatory Personnel
      */
-    public void setBIRAccount(int seqID, BIRAccount bir,String personel) {
-        this.SEQ_ID = seqID;
-        this.myEmployee = bir;
-        this.myIncome = myEmployee.getAnnualIncome();
-        this.JobInfo = myEmployee.getJobInformation();
-        this.myEmployer = JobInfo.getCompany();
-        this.Dependents = myEmployee.getDependents();
-        this.AuthorizedPersonel = personel;
+    public void setBIRAccount(BIRAccount bir,String personel) {
+        myEmployee = bir;
+        SEQ_ID = Integer.parseInt(myEmployee.getSequenceID());
+        myIncome = myEmployee.getAnnualIncome();
+        JobInfo = myEmployee.getJobInformation();
+        myEmployer = JobInfo.getCompany();
+        Dependents = myEmployee.getDependents();
+        AuthorizedPersonel = personel;
     }
 
     public boolean encodeTo(WorkBook temp) {

@@ -26,11 +26,18 @@ public class BIRAccount extends Person implements BIRInformation {
     private List<Dependent> dependents = new ArrayList();
     
     //Internal Object Variables
-    private String Schedule,Year;
+    private String Schedule,Year,seqID;
     
     public BIRAccount(Income i,JobInformation j){
         this.AnnualIncome = i;
         this.MyJob = j;
+    }
+    
+    public void setSequenceID(String s){
+        this.seqID = s;
+    }
+    public String getSequenceID(){
+        return seqID;
     }
     
     public void setSchedule(String s){
