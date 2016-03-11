@@ -32,6 +32,8 @@ public class Data2316 {
     private char[] eTIN;
     private static List<Dependent> Dependents;
     private static String AuthorizedPersonel = "";
+    private static double Result1;    
+    private static double Result2;
     
     
     /**
@@ -48,6 +50,11 @@ public class Data2316 {
         AuthorizedPersonel = personel;
     }
 
+    /**
+     *
+     * @param temp - Excel Workboot Template of BIRForm-2316
+     * @return
+     */
     public boolean encodeTo(WorkBook temp) {
         try {
             if (temp != null) {
@@ -119,42 +126,43 @@ public class Data2316 {
                     temp.setText("B68", "x");
 
                     //Minimum Wager Inputs(7.5)
-                    temp.setText("AL65", "Non Taxable GROSS (41)");
-                    temp.setText("O104", "Non Taxable GROSS (21)");
-                    temp.setText("O107", "Non Taxable GROSS (22)");
-                    temp.setText("AL22", "BASIC (32)");
-                    temp.setText("AL27", "HOLIDAY (33)");
-                    temp.setText("AL31", "OVERTIME (34)");
-                    temp.setText("AL37", "NIGHT DIFFERENTIAL (35)");
-                    temp.setText("AL41", "HAZARDPAY (36)");
-                    temp.setText("AL46", "13TH MONTH PAY (37)");
-                    temp.setText("AL49", "DEMINIMIS BENEFITS (38)");
-                    temp.setText("AL54", "GOV'T CONTRIBUTIONS (39)");
-                    temp.setText("AL59", "OTHER SALARY (40)");
+                    temp.setText("AL65", myIncome.getNonTaxableGrossPay());//Non Taxable GROSS (41)
+                    temp.setText("O104", myIncome.getNonTaxableGrossPay());//Non Taxable GROSS (21)
+                    temp.setText("O107", myIncome.getNonTaxableGrossPay());//Non Taxable GROSS (22)
+                    temp.setText("AL22", myIncome.getNonTaxableBasicPay());//BASIC (32)
+                    temp.setText("AL27", myIncome.getNonTaxableHolidayPay());//HOLIDAY (33)
+                    temp.setText("AL31", myIncome.getNonTaxableOvertimePay());//OVERTIME (34)
+                    temp.setText("AL37", myIncome.getNonTaxableNightDifferentialPay());//NIGHT DIFFERENTIAL (35)
+                    temp.setText("AL41", myIncome.getNonTaxableHazardPay());//HAZARDPAY (36)
+                    temp.setText("AL46", myIncome.getNonTaxable13thMonthPay());//13TH MONTH PAY (37)
+                    temp.setText("AL49", myIncome.getNonTaxableDeminimisBenifits());//DEMINIMIS BENEFITS (38)
+                    temp.setText("AL54", myIncome.getNonTaxableGovermentContributions());//GOV'T CONTRIBUTIONS (39)
+                    temp.setText("AL59", myIncome.getNonTaxableOtherSalary());//OTHER SALARY (40)
                     
                 } else if(myEmployee.getSchedule().contains("7.1") || myEmployee.getSchedule().contains("7.3")){
                     
                     //Non Taxables
-                    temp.setText("AL46", "NON-TAXABLE 13th Month Pay (37)");
-                    temp.setText("AL49", "NON-TAXABLE DEMINIMIS (38)");
-                    temp.setText("AL54", "NON-TAXABLE GOV'T CONTRI (39)");
-                    temp.setText("AL59", "NON-TAXABLE OTHER SALARY (40)");
-                    temp.setText("AL65", "NON-TAXABLE COMPENSATION INCOME (41)");
-                    temp.setText("O107", "NON-TAXABLE COMPENSATION INCOME (22)");
-                    temp.setText("O104", "NON-TAXABLE GROSS + TAXABLE GROSS (21)");
+                    temp.setText("AL46", myIncome.getNonTaxable13thMonthPay());//13TH MONTH PAY (37)
+                    temp.setText("AL49", myIncome.getNonTaxableDeminimisBenifits());//DEMINIMIS BENEFITS (38)
+                    temp.setText("AL54", myIncome.getNonTaxableGovermentContributions());//GOV'T CONTRIBUTIONS (39)
+                    temp.setText("AL59", myIncome.getNonTaxableOtherSalary());//OTHER SALARY (40)
+                    temp.setText("AL65", myIncome.getNonTaxableCompensationIncome());//NON-TAXABLE COMPENSATION INCOME (41)
+                    temp.setText("O107", myIncome.getNonTaxableCompensationIncome());//NON-TAXABLE COMPENSATION INCOME (22)
+                    Result1= Double.parseDouble(myIncome.getNonTaxableGrossPay())+Double.parseDouble(myIncome.getTaxableGrossPay());
+                    temp.setText("O104", String.valueOf(Result1));//NON-TAXABLE GROSS + TAXABLE GROSS (21)
                     
-                    temp.setText("AL72", "TAXABLE BASIC (42)");
-                    temp.setText("O110", "TAXABLE COMPENSATION INCOME (23)");
-                    temp.setText("AL141", "TAXABLE COMPENSATION INCOME (55)");
-                    temp.setText("O116", "TAXABLE GROSS (25)");
-                    temp.setText("O119", "TAX EXCEMPTION AMOUNT (26)");
-                    temp.setText("O122", "PREMIUM HEALTH EXCEMPTION AMOUNT (27)");
-                    temp.setText("O125", "NET COMPENSATION INCOME (28)");
+                    temp.setText("AL72", myIncome.getTaxableBasicPay());//TAXABLE BASIC (42)
+                    temp.setText("O110", myIncome.getTaxableCompensationIncome());//TAXABLE COMPENSATION INCOME (23)
+                    temp.setText("AL141", myIncome.getTaxableCompensationIncome());//TAXABLE COMPENSATION INCOME (55)
+                    temp.setText("O116", myIncome.getTaxableGrossPay());//TAXABLE GROSS (25)
+                    temp.setText("O119", myIncome.getTaxExcemptionAmount());//TAX EXCEMPTION AMOUNT (26)
+                    temp.setText("O122", myIncome.getPremiumHealthExcemptionAmount());//PREMIUM HEALTH EXCEMPTION AMOUNT (27)
+                    temp.setText("O125", myIncome.getNetCompensationIncome());//NET COMPENSATION INCOME (28)
                     
-                    
-                    temp.setText("O128", "EXCESS WITHHELD - OVERWITHHELD (29)");
-                    temp.setText("O132", "EXCESS WITHHELD - OVERWITHHELD (30)");
-                    temp.setText("O141", "EXCESS WITHHELD - OVERWITHHELD (31)");
+                    Result2 = Double.parseDouble(myIncome.getExcessAmountWithheld())-Double.parseDouble(myIncome.getOverWithheldAmount());
+                    temp.setText("O128", String.valueOf(Result2));//EXCESS WITHHELD - OVERWITHHELD (29)
+                    temp.setText("O132", String.valueOf(Result2));//EXCESS WITHHELD - OVERWITHHELD (30)
+                    temp.setText("O141", String.valueOf(Result2));//EXCESS WITHHELD - OVERWITHHELD (31)
                     
                 }
 
@@ -179,7 +187,12 @@ public class Data2316 {
         }
     }
 
-    
+    /**
+     *
+     * @param date - Date to be Formated
+     * @param full - if True year will be included ex.(10/10/2015) else ex.(10 / 10)
+     * @return
+     */
     public String formatDate(String date, boolean full) {
         try {
             if (!date.isEmpty()) {
