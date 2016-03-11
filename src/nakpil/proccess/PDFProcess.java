@@ -7,35 +7,54 @@ package nakpil.proccess;
 
 import com.smartxls.WorkBook;
 import java.util.List;
+import javax.swing.JButton;
+import javax.swing.JProgressBar;
 import nakpil.core.cl.BIRAccount;
 
 /**
  *
  * @author HERU
  */
-public final class PDFProcess implements Runnable{
+public final class PDFProcess implements Runnable {
 
     private final List<BIRAccount> Datas;
     private final String Personel;
     private static WorkBook Template;
     private static String Output;
-    
-    public PDFProcess(List<BIRAccount> acc,String perso,boolean print,int cp){
+    private static String Source;
+    private static JProgressBar Bar;
+    private static JButton Button;
+
+    public PDFProcess(List<BIRAccount> acc, String perso, boolean print, int cp, JProgressBar jpb,JButton b) {
         this.Datas = acc;
         this.Personel = perso;
+        Bar = jpb;
     }
-    
-    public void setTemplate(String source){
-        
+
+    public final void setTemplate(String src) {
+        Source = src;
     }
-    
+
     @Override
     public void run() {
-        try{
-            
-        }catch(Exception er){
-            
+        try {
+            reset();
+            Button.setText("Stop");
+            if (Datas.size() > 1) {
+                
+            } else if (Datas.size() == 1) {
+                
+            } else {
+
+            }
+        } catch (Exception er) {
+            Button.setText("Start");
         }
     }
-    
+
+    private void reset() {
+        Bar.setString("");
+        Bar.setValue(0);
+    }
+
 }
