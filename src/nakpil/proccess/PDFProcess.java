@@ -83,12 +83,18 @@ public final class PDFProcess implements Runnable {
                 for (BIRAccount Temp : Datas) {
                     i++;
                     Bar.setString("Encoding " + Temp.getFullname());
+                    
+                    //Open Template
                     Template = new WorkBook();
                     iStream = new FileInputStream(Source);
                     Template.readXLSX(iStream);
+                    
+                    //Forming Data Encode
                     BIR_Form = new Data2316();
                     BIR_Form.setBIRAccount(Temp, Personel);
                     BIR_Form.encodeTo(Template);
+                    
+                    //Prepare Pdf Output
                     Output = ((Output.isEmpty()) ? System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "BIR2316" + File.separator + Temp.getTinNumber()
                             + ".pdf" : Output + File.separator + Temp.getTinNumber() + ".pdf");
                     oStream = new FileOutputStream(Output);
