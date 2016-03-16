@@ -18,12 +18,13 @@ import javax.swing.JButton;
 import javax.swing.JProgressBar;
 import nakpil.core.cl.BIRAccount;
 import nakpil.core.cl.Data2316;
+import nakpil.core.ui.ProgressDialog;
 
 /**
  *
  * @author HERU
  */
-public final class PDFProcess implements Runnable {
+public final class Form2316Process implements Runnable {
 
     private static List<BIRAccount> Datas;
     private static String Personel;
@@ -49,13 +50,22 @@ public final class PDFProcess implements Runnable {
     private static Process PrintProgram;
     
 
-    public PDFProcess(final List<BIRAccount> acc, String perso, boolean print, int cp, JProgressBar jpb, JButton b) {
+    public Form2316Process(final List<BIRAccount> acc, String perso, JButton b) {
         Datas = acc;
         Personel = perso;
-        Bar = jpb;
         Button = b;
-        Print = print;
+    }
+    
+    public void setPrint(boolean b){
+        Print =b;
+    }
+    
+    public void setPrintCopy(int cp){
         Copy = cp;
+    }
+    
+    public void setProgressDialog(ProgressDialog jpb){
+        Bar = jpb.getProgressBar();
     }
 
     public final void setTemplate(String src) {
@@ -79,7 +89,9 @@ public final class PDFProcess implements Runnable {
         try {
 
             reset();
-            Button.setText("Stop");
+            if(Button != null){
+                Button.setText("Stop");
+            }
             if (Datas.size() > 1) {
                 Bar.setMaximum(Datas.size());
                 int i = 0;
@@ -137,6 +149,7 @@ public final class PDFProcess implements Runnable {
                 document.close();
                 oStream_bulk.flush();
                 oStream_bulk.close();
+                PDFcopy = null;
                 oStream = null;
                 if(Print){
                     if(Copy == 1){
@@ -185,7 +198,9 @@ public final class PDFProcess implements Runnable {
                 Bar.setString("Process Done");
             }
         } catch (Exception er) {
-            Button.setText("Start");
+            if(Button != null){
+                Button.setText("Start");
+            }
             Bar.setString(er.toString());
         } finally {
             try {
@@ -196,11 +211,20 @@ public final class PDFProcess implements Runnable {
                     oStream.flush();
                     oStream.close();
                 }
+                if (PDFcopy != null){
+                    PDFcopy.close();
+                    document.close();
+                    oStream_bulk.flush();
+                    oStream_bulk.close();
+                }
                 BIR_Form = null;
                 Datas = null;
                 Template = null;
                 iStream = null;
                 oStream = null;
+                PDFcopy = null;
+                oStream = null;
+                document = null;
                 System.gc();
             } catch (Exception er) {
                 Bar.setString(er.toString());
