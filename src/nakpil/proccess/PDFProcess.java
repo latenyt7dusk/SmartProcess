@@ -43,13 +43,19 @@ public final class PDFProcess implements Runnable {
     private static PdfCopy PDFcopy;
     private static com.itextpdf.text.Document document;
     private static String printCMD;
-    private static String printARG;
+    private static String printPreARG;
+    private static String printPostARG;
+    private static boolean doPrint;
+    private static Process PrintProgram;
+    
 
     public PDFProcess(final List<BIRAccount> acc, String perso, boolean print, int cp, JProgressBar jpb, JButton b) {
         Datas = acc;
         Personel = perso;
         Bar = jpb;
         Button = b;
+        Print = print;
+        Copy = cp;
     }
 
     public final void setTemplate(String src) {
@@ -61,9 +67,10 @@ public final class PDFProcess implements Runnable {
         Output_batch = out;
     }
     
-    public final void setPrintCommanlineArguement(String cmd,String arg){
+    public final void setPrintCommanlineArguement(String cmd,String prearg,String postarg){
         printCMD = cmd;
-        printARG = arg;
+        printPreARG = prearg;
+        printPostARG = postarg;
     }
     
 
@@ -87,7 +94,7 @@ public final class PDFProcess implements Runnable {
                     //Open Template
                     Template = new WorkBook();
                     iStream = new FileInputStream(Source);
-                    Template.readXLSX(iStream);
+                    Template.readXLSB(iStream);
                     
                     //Forming Data Encode
                     BIR_Form = new Data2316();
@@ -118,22 +125,51 @@ public final class PDFProcess implements Runnable {
                     PDFreader = null;
                     
                     //Close Template
+                    Template.dispose();
+                    Template = null;
+                    iStream.close();
+                    iStream = null;
                     
                     Bar.setValue(i);
                     System.gc();
                 }
                 PDFcopy.close();
-                
+                document.close();
+                oStream_bulk.flush();
+                oStream_bulk.close();
+                oStream = null;
+                if(Print){
+                    if(Copy == 1){
+                        PrintProgram = Runtime.getRuntime().exec(printCMD+((printPreARG.isEmpty())? "":" "+printPreARG+" ")+
+                                "\""+Output_batch+File.separator+Datas.get(0).getSequenceID()+"-"+Datas.get(Datas.size()-1).getSequenceID()+".pdf\""+
+                                ((printPostARG.isEmpty())? "":" "+printPostARG));
+                        Bar.setString("Print Job Sent.");
+                    }else if(Copy > 1){
+                        for(int c = 1;c <= Copy;c++){
+                            PrintProgram = Runtime.getRuntime().exec(printCMD+((printPreARG.isEmpty())? "":" "+printPreARG+" ")+
+                                "\""+Output_batch+File.separator+Datas.get(0).getSequenceID()+"-"+Datas.get(Datas.size()-1).getSequenceID()+".pdf\""+
+                                ((printPostARG.isEmpty())? "":" "+printPostARG));
+                            Bar.setString("Print Job ["+i+"] Sent.");
+                        }
+                    }
+                }
+                Bar.setString("Finished");
             } else if (Datas.size() == 1) {
                 Bar.setMaximum(2);
                 Bar.setValue(1);
                 Bar.setString("Encoding " + Datas.get(0).getFullname());
+                
+                //Load Template
                 Template = new WorkBook();
                 iStream = new FileInputStream(Source);
                 Template.readXLSX(iStream);
+                
+                //Encode Data
                 BIR_Form = new Data2316();
                 BIR_Form.setBIRAccount(Datas.get(0), Personel);
                 BIR_Form.encodeTo(Template);
+                
+                //Prepare PDF Export;
                 Output = ((Output.isEmpty()) ? System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "BIR2316" + File.separator + Datas.get(0).getTinNumber()
                         + ".pdf" : Output + File.separator + Datas.get(0).getTinNumber() + ".pdf");
                 oStream = new FileOutputStream(Output);
@@ -144,14 +180,13 @@ public final class PDFProcess implements Runnable {
                 }
                 Bar.setString("Exporting PDF : " + Output);
                 Template.exportPDF(oStream);
+                
                 Bar.setValue(2);
                 Bar.setString("Process Done");
-            } else {
-
             }
         } catch (Exception er) {
             Button.setText("Start");
-
+            Bar.setString(er.toString());
         } finally {
             try {
                 if (iStream != null) {
@@ -168,9 +203,8 @@ public final class PDFProcess implements Runnable {
                 oStream = null;
                 System.gc();
             } catch (Exception er) {
-
+                Bar.setString(er.toString());
             }
-
         }
     }
 
