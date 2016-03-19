@@ -5,7 +5,9 @@
  */
 package nakpil.proccess;
 
+import com.smartxls.WorkBook;
 import java.io.IOException;
+import nakpil.core.cl.DateUtils;
 import nakpil.core.ui.ProgressDialog;
 
 /**
@@ -17,9 +19,17 @@ public class NewMain {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, Exception {
        //Process e = com.lowagie.tools.Executable.printDocumentSilent("D:\\BIR 2316_2015 Files\\2316 Printer\\PDF\\1-100\\1-100.pdf",false);
-       new ProgressDialog().initComponents();
+       //new ProgressDialog().initComponents();
+       
+       
+       WorkBook temp = new WorkBook();
+       temp.readXLSB("D:\\BIR 2316_2015 Files\\2316 Printer\\Source.xlsb");
+       temp.setSheet(0);
+       System.out.println(DateUtils.convertExcelDate(Integer.parseInt(temp.getText(2, 22))));
+       
+       
     }
     
 }
