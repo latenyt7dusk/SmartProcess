@@ -94,6 +94,7 @@ public final class Form2316Process implements Runnable {
                 oStream_bulk = new FileOutputStream(Output_batch + File.separator + Datas.get(0).getSequenceID() + "-" + Datas.get(Datas.size() - 1).getSequenceID() + ".pdf");
                 PDFcopy = new PdfCopy(document, oStream_bulk);
                 document.open();
+                PDialog.printResult("Starting Module Services.");
                 for (BIRAccount Temp : Datas) {
                     i++;
                     Bar.setString("Encoding " + Temp.getFullname());
@@ -137,6 +138,7 @@ public final class Form2316Process implements Runnable {
                     iStream = null;
 
                     Bar.setValue(i);
+                    PDialog.printResult(Temp.getFullname()+" Encoding completed...");
                     System.gc();
                 }
                 PDFcopy.close();

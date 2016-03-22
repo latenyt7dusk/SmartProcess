@@ -7,29 +7,39 @@ package nakpil.proccess;
 
 import com.smartxls.WorkBook;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JFrame;
+import nakpil.core.cl.BIRAccount;
 import nakpil.core.cl.DateUtils;
 import nakpil.core.ui.ProgressDialog;
+import nakpil.income.Income;
+import nakpil.work.JobInformation;
 
 /**
  *
  * @author HERU
  */
-public class NewMain {
+public class NewMain{
 
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException, Exception {
        //Process e = com.lowagie.tools.Executable.printDocumentSilent("D:\\BIR 2316_2015 Files\\2316 Printer\\PDF\\1-100\\1-100.pdf",false);
-       //new ProgressDialog().initComponents();
+        ProgressDialog e = new ProgressDialog();
+        Fetch2316Process proc = new Fetch2316Process(null,e);
        
+       e.start();
        
-       WorkBook temp = new WorkBook();
-       temp.readXLSB("D:\\BIR 2316_2015 Files\\2316 Printer\\Source.xlsb");
-       temp.setSheet(0);
-       System.out.println(DateUtils.convertExcelDate(Integer.parseInt(temp.getText(2, 22))));
+       //WorkBook temp = new WorkBook();
+       //temp.readXLSB("D:\\BIR 2316_2015 Files\\2316 Printer\\Source.xlsb");
+       //temp.setSheet(0);
+       //System.out.println(DateUtils.convertExcelDate(Integer.parseInt(temp.getText(2, 22))));
        
        
     }
+
     
 }

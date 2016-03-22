@@ -14,8 +14,9 @@ import java.util.Date;
  */
 public class DateUtils {
     
-    private static Calendar Cal = Calendar.getInstance();
-    
+    private static final Calendar Cal = Calendar.getInstance();
+    private static final long MILLI_SECONDS_YEAR = 31558464000L;
+    private static final long MILLI_SECONDS_DAY = 86400000L;
     
     public static Date convertExcelDate(int val){
         try{
@@ -30,5 +31,17 @@ public class DateUtils {
         }
     }
     
-    
+   public static int computeAge(Date sDate) {
+        Date dbDate;
+        try {
+            dbDate = sDate;
+            dbDate.setHours(0);
+            long timeDiff = ((System.currentTimeMillis() <= dbDate.getTime())? 0: System.currentTimeMillis() - dbDate.getTime());
+            int age = (int) (timeDiff / MILLI_SECONDS_YEAR);
+
+            return age;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
 }

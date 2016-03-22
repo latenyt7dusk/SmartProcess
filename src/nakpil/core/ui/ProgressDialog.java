@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -19,10 +20,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
+import nakpil.proccess.Fetch2316Process;
 import nakpil.proccess.Form2316Process;
 
 /**
@@ -32,25 +37,42 @@ import nakpil.proccess.Form2316Process;
 public class ProgressDialog {
 
     private static final Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static JDialog dialog;
+    private static JFrame dialog;
     private static ProgressPanel PrPanel;
     private static ProgressTitleBar TrPanel;
     private static Thread TRD;
     private static Object ProcessObj;
 
+    private JProgressBar jProgressBar1 = new JProgressBar();
+    private JLabel jLabel1 = new JLabel();
+    private JScrollPane jScrollPane1 = new JScrollPane();
+    private JTextArea jTextArea1 = new JTextArea();
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+
     public void setProcessObject(Object proc) {
         ProcessObj = proc;
     }
 
-    public JProgressBar getProgressBar() {
-        return PrPanel.getProgressBar();
+    public final JProgressBar getProgressBar() {
+        return jProgressBar1;
     }
 
-    public void start() {
+    public void printResult(String s) {
+        jTextArea1.append(s+"\n");
+    }
+
+    public void start() throws InterruptedException {
         if (TRD == null) {
+            initComponents();
             if (ProcessObj instanceof Form2316Process) {
                 TRD = new Thread((Form2316Process) ProcessObj);
                 TRD.start();
+                TRD.join();
+            }else if(ProcessObj instanceof Fetch2316Process){
+                TRD = new Thread((Fetch2316Process) ProcessObj);
+                
+                TRD.start();
+                TRD.join();
             }
         }
     }
@@ -68,8 +90,8 @@ public class ProgressDialog {
 
     public void initComponents() {
         try {
-            Window parent = null;
-            dialog = new JDialog((Dialog) parent, true);
+            
+            dialog = new JFrame();
             JPanel Container = new JPanel();
             Container.setLayout(new BorderLayout());
 
@@ -92,7 +114,7 @@ public class ProgressDialog {
         }
     }
 
-    private static class ProgressPanel extends javax.swing.JPanel {
+    private class ProgressPanel extends javax.swing.JPanel {
 
         /**
          * Creates new form ui
@@ -101,9 +123,7 @@ public class ProgressDialog {
             initComponents();
         }
 
-        public JProgressBar getProgressBar() {
-            return jProgressBar1;
-        }
+        
 
         /**
          * This method is called from within the constructor to initialize the
@@ -116,10 +136,15 @@ public class ProgressDialog {
 
             bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-            jProgressBar1 = new javax.swing.JProgressBar();
-            jLabel1 = new javax.swing.JLabel();
+            jTextArea1.setEditable(false);
+            jTextArea1.setColumns(20);
+            jTextArea1.setLineWrap(true);
+            jTextArea1.setRows(5);
+            jScrollPane1.setViewportView(jTextArea1);
+            jTextArea1.setBackground(Color.WHITE);
+            jTextArea1.setForeground(Color.BLACK);
 
-            jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4));
+            jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
             org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jProgressBar1, org.jdesktop.beansbinding.ELProperty.create("${string}"), jLabel1, org.jdesktop.beansbinding.BeanProperty.create("text"));
             bindingGroup.addBinding(binding);
@@ -132,7 +157,8 @@ public class ProgressDialog {
                             .addGap(5, 5, 5)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE))
+                                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
                             .addGap(5, 5, 5))
             );
             layout.setVerticalGroup(
@@ -142,22 +168,20 @@ public class ProgressDialog {
                             .addComponent(jLabel1)
                             .addGap(0, 0, 0)
                             .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(5, 5, 5)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, Short.MAX_VALUE)
                             .addGap(5, 5, 5))
             );
 
             bindingGroup.bind();
         }// </editor-fold>                        
 
-        private javax.swing.JLabel jLabel1;
-        private javax.swing.JProgressBar jProgressBar1;
-        private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-
     }
 
     private static class ProgressTitleBar extends JPanel {
 
         private static final JLabel title = new JLabel();
-        private static final JButton button = new JButton("Stop");
+        private static final JButton button = new JButton("STOP");
         private static int xMouse;
         private static int yMouse;
 
@@ -170,7 +194,7 @@ public class ProgressDialog {
             button.setFocusPainted(false);
             button.setFocusable(false);
             button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            button.setMargin(new Insets(1, 2, 1, 2));
+            button.setMargin(new Insets(1, 2, 1, 4));
             this.setBackground(new Color(51, 153, 255));
             this.setLayout(new BorderLayout());
             this.add(title, BorderLayout.CENTER);
