@@ -5,16 +5,7 @@
  */
 package nakpil.proccess;
 
-import com.smartxls.WorkBook;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JFrame;
-import nakpil.core.cl.BIRAccount;
-import nakpil.core.cl.DateUtils;
-import nakpil.core.ui.ProgressDialog;
-import nakpil.income.Income;
-import nakpil.work.JobInformation;
 
 /**
  *

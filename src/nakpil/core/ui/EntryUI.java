@@ -5,11 +5,10 @@
  */
 package nakpil.core.ui;
 
-import com.smartxls.WorkBook;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableCellRenderer;
 import nakpil.proccess.Fetch2316Process;
 import nakpil.proccess.Verify2316Process;
 
@@ -20,22 +19,41 @@ import nakpil.proccess.Verify2316Process;
 public class EntryUI extends javax.swing.JFrame {
 
     public static Thread TRD;
-    
+    public static DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+    public static DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
+    public static DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+    private static JFileChooser FileChooser = new JFileChooser();
+    private static File EntryFile;
+    private static String ewan = "ewan";
+
     /**
      * Creates new form EntryUI
      */
     public EntryUI() {
         initComponents();
-        //addData();
+
+        //tableInit();
     }
 
-    public void addData(){
-        DefaultTableModel e = (DefaultTableModel) EntryTable.getModel();
-        for(int i = 0;i < 10000; i++){
-            e.addRow(new Object[]{"7.5",String.valueOf(i),"testasdasd","testasdasd","testasdasd","testasdasd","testasdasd","testasdasd","testasdasd","testasdasd"});
+    public boolean selectImport() {
+        try {
+
+            FileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            int i = FileChooser.showDialog(this, "Import");
+            if (i == JFileChooser.APPROVE_OPTION) {
+                EntryFile = FileChooser.getSelectedFile();
+                return true;
+            } else {
+                jTextField1.setText(null);
+                return false;
+            }
+
+        } catch (Exception er) {
+            JOptionPane.showMessageDialog(this, "Error Importing File Entry");
+            return false;
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -46,53 +64,40 @@ public class EntryUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        EntryTable = new javax.swing.JTable();
         ProgressBar = new javax.swing.JProgressBar();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        jPanel8 = new javax.swing.JPanel();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        Entry75a_Table = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        Entry75i_Table = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        Entry73_Table = new javax.swing.JTable();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        Entry71_Table = new javax.swing.JTable();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        jPanel10 = new javax.swing.JPanel();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        EntryAll_Table = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        EntryTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Sched", "Index", "TIN", "SSS", "Surname", "Firstname", "Midlename", "Verify 1", "Verify 2", "Verify 3"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(EntryTable);
-        if (EntryTable.getColumnModel().getColumnCount() > 0) {
-            EntryTable.getColumnModel().getColumn(0).setMinWidth(45);
-            EntryTable.getColumnModel().getColumn(0).setMaxWidth(45);
-            EntryTable.getColumnModel().getColumn(1).setMinWidth(45);
-            EntryTable.getColumnModel().getColumn(1).setMaxWidth(45);
-            EntryTable.getColumnModel().getColumn(2).setMinWidth(65);
-            EntryTable.getColumnModel().getColumn(2).setMaxWidth(65);
-            EntryTable.getColumnModel().getColumn(3).setMinWidth(65);
-            EntryTable.getColumnModel().getColumn(3).setMaxWidth(65);
-            EntryTable.getColumnModel().getColumn(7).setMinWidth(65);
-            EntryTable.getColumnModel().getColumn(7).setMaxWidth(65);
-            EntryTable.getColumnModel().getColumn(8).setMinWidth(65);
-            EntryTable.getColumnModel().getColumn(8).setMaxWidth(65);
-            EntryTable.getColumnModel().getColumn(9).setMinWidth(65);
-            EntryTable.getColumnModel().getColumn(9).setMaxWidth(65);
-        }
-
         ProgressBar.setStringPainted(true);
+
+        jTextField1.setEditable(false);
+        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
 
         jButton1.setText("Select AlphaList");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -102,6 +107,7 @@ public class EntryUI extends javax.swing.JFrame {
         });
 
         jButton3.setText("Verify");
+        jButton3.setEnabled(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -109,53 +115,458 @@ public class EntryUI extends javax.swing.JFrame {
         });
 
         jButton4.setText("Upload");
+        jButton4.setEnabled(false);
 
-        jButton5.setText("Export Results");
+        jLabel1.setBackground(new java.awt.Color(204, 204, 204));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 2, 1, 2));
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel1.setOpaque(true);
 
-        jButton2.setText("Error Codes");
+        jPanel8.setPreferredSize(new java.awt.Dimension(1642, 335));
+        jPanel8.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane9.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        Entry75a_Table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Index", "SITE", "TIN", "SSS", "Surname", "Firstname", "Midlename", "Date Hired", "Date Separated", "Basic", "Overtime", "Night Differential", "13th Month", "Gov't Contri", "Other Salaries", "Deminimis", "Gross"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        Entry75a_Table.setRowHeight(19);
+        Entry75a_Table.setShowHorizontalLines(false);
+        Entry75a_Table.setShowVerticalLines(false);
+        Entry75a_Table.getTableHeader().setReorderingAllowed(false);
+        jScrollPane9.setViewportView(Entry75a_Table);
+        if (Entry75a_Table.getColumnModel().getColumnCount() > 0) {
+            Entry75a_Table.getColumnModel().getColumn(0).setMinWidth(45);
+            Entry75a_Table.getColumnModel().getColumn(0).setPreferredWidth(45);
+            Entry75a_Table.getColumnModel().getColumn(0).setMaxWidth(45);
+            Entry75a_Table.getColumnModel().getColumn(1).setMinWidth(65);
+            Entry75a_Table.getColumnModel().getColumn(1).setPreferredWidth(65);
+            Entry75a_Table.getColumnModel().getColumn(1).setMaxWidth(65);
+            Entry75a_Table.getColumnModel().getColumn(2).setMinWidth(80);
+            Entry75a_Table.getColumnModel().getColumn(2).setPreferredWidth(80);
+            Entry75a_Table.getColumnModel().getColumn(2).setMaxWidth(80);
+            Entry75a_Table.getColumnModel().getColumn(3).setMinWidth(80);
+            Entry75a_Table.getColumnModel().getColumn(3).setPreferredWidth(80);
+            Entry75a_Table.getColumnModel().getColumn(3).setMaxWidth(80);
+            Entry75a_Table.getColumnModel().getColumn(4).setMinWidth(150);
+            Entry75a_Table.getColumnModel().getColumn(4).setPreferredWidth(150);
+            Entry75a_Table.getColumnModel().getColumn(4).setMaxWidth(150);
+            Entry75a_Table.getColumnModel().getColumn(5).setMinWidth(150);
+            Entry75a_Table.getColumnModel().getColumn(5).setPreferredWidth(150);
+            Entry75a_Table.getColumnModel().getColumn(5).setMaxWidth(150);
+            Entry75a_Table.getColumnModel().getColumn(6).setMinWidth(150);
+            Entry75a_Table.getColumnModel().getColumn(6).setPreferredWidth(150);
+            Entry75a_Table.getColumnModel().getColumn(6).setMaxWidth(150);
+            Entry75a_Table.getColumnModel().getColumn(7).setMinWidth(100);
+            Entry75a_Table.getColumnModel().getColumn(7).setPreferredWidth(100);
+            Entry75a_Table.getColumnModel().getColumn(7).setMaxWidth(100);
+            Entry75a_Table.getColumnModel().getColumn(8).setMinWidth(100);
+            Entry75a_Table.getColumnModel().getColumn(8).setPreferredWidth(100);
+            Entry75a_Table.getColumnModel().getColumn(8).setMaxWidth(100);
+            Entry75a_Table.getColumnModel().getColumn(9).setMinWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(9).setPreferredWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(9).setMaxWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(10).setMinWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(10).setPreferredWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(10).setMaxWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(11).setMinWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(11).setPreferredWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(11).setMaxWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(12).setMinWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(12).setPreferredWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(12).setMaxWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(13).setMinWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(13).setPreferredWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(13).setMaxWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(14).setMinWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(14).setPreferredWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(14).setMaxWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(15).setMinWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(15).setPreferredWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(15).setMaxWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(16).setMinWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(16).setPreferredWidth(90);
+            Entry75a_Table.getColumnModel().getColumn(16).setMaxWidth(90);
+        }
+
+        jPanel8.add(jScrollPane9, java.awt.BorderLayout.CENTER);
+
+        jScrollPane8.setViewportView(jPanel8);
+
+        jTabbedPane1.addTab("7.5 Active", jScrollPane8);
+
+        jPanel2.setPreferredSize(new java.awt.Dimension(1642, 335));
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        Entry75i_Table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Index", "SITE", "TIN", "SSS", "Surname", "Firstname", "Midlename", "Date Hired", "Date Separated", "Basic", "Overtime", "Night Differential", "13th Month", "Gov't Contri", "Other Salaries", "Deminimis", "Gross"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        Entry75i_Table.setRowHeight(19);
+        Entry75i_Table.setShowHorizontalLines(false);
+        Entry75i_Table.setShowVerticalLines(false);
+        Entry75i_Table.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(Entry75i_Table);
+        if (Entry75i_Table.getColumnModel().getColumnCount() > 0) {
+            Entry75i_Table.getColumnModel().getColumn(0).setMinWidth(45);
+            Entry75i_Table.getColumnModel().getColumn(0).setPreferredWidth(45);
+            Entry75i_Table.getColumnModel().getColumn(0).setMaxWidth(45);
+            Entry75i_Table.getColumnModel().getColumn(1).setMinWidth(65);
+            Entry75i_Table.getColumnModel().getColumn(1).setPreferredWidth(65);
+            Entry75i_Table.getColumnModel().getColumn(1).setMaxWidth(65);
+            Entry75i_Table.getColumnModel().getColumn(2).setMinWidth(80);
+            Entry75i_Table.getColumnModel().getColumn(2).setPreferredWidth(80);
+            Entry75i_Table.getColumnModel().getColumn(2).setMaxWidth(80);
+            Entry75i_Table.getColumnModel().getColumn(3).setMinWidth(80);
+            Entry75i_Table.getColumnModel().getColumn(3).setPreferredWidth(80);
+            Entry75i_Table.getColumnModel().getColumn(3).setMaxWidth(80);
+            Entry75i_Table.getColumnModel().getColumn(4).setMinWidth(150);
+            Entry75i_Table.getColumnModel().getColumn(4).setPreferredWidth(150);
+            Entry75i_Table.getColumnModel().getColumn(4).setMaxWidth(150);
+            Entry75i_Table.getColumnModel().getColumn(5).setMinWidth(150);
+            Entry75i_Table.getColumnModel().getColumn(5).setPreferredWidth(150);
+            Entry75i_Table.getColumnModel().getColumn(5).setMaxWidth(150);
+            Entry75i_Table.getColumnModel().getColumn(6).setMinWidth(150);
+            Entry75i_Table.getColumnModel().getColumn(6).setPreferredWidth(150);
+            Entry75i_Table.getColumnModel().getColumn(6).setMaxWidth(150);
+            Entry75i_Table.getColumnModel().getColumn(7).setMinWidth(100);
+            Entry75i_Table.getColumnModel().getColumn(7).setPreferredWidth(100);
+            Entry75i_Table.getColumnModel().getColumn(7).setMaxWidth(100);
+            Entry75i_Table.getColumnModel().getColumn(8).setMinWidth(100);
+            Entry75i_Table.getColumnModel().getColumn(8).setPreferredWidth(100);
+            Entry75i_Table.getColumnModel().getColumn(8).setMaxWidth(100);
+            Entry75i_Table.getColumnModel().getColumn(9).setMinWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(9).setPreferredWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(9).setMaxWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(10).setMinWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(10).setPreferredWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(10).setMaxWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(11).setMinWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(11).setPreferredWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(11).setMaxWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(12).setMinWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(12).setPreferredWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(12).setMaxWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(13).setMinWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(13).setPreferredWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(13).setMaxWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(14).setMinWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(14).setPreferredWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(14).setMaxWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(15).setMinWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(15).setPreferredWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(15).setMaxWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(16).setMinWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(16).setPreferredWidth(90);
+            Entry75i_Table.getColumnModel().getColumn(16).setMaxWidth(90);
+        }
+
+        jPanel2.add(jScrollPane3, java.awt.BorderLayout.CENTER);
+
+        jScrollPane2.setViewportView(jPanel2);
+
+        jTabbedPane1.addTab("7.5 Inactive", jScrollPane2);
+
+        jPanel4.setPreferredSize(new java.awt.Dimension(1642, 335));
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane5.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        Entry73_Table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Index", "SITE", "TIN", "SSS", "Surname", "Firstname", "Midlename", "Date Hired", "Date Separated", "Basic", "Overtime", "Night Differential", "13th Month", "Gov't Contri", "Other Salaries", "Deminimis", "Gross"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        Entry73_Table.setRowHeight(19);
+        Entry73_Table.setShowHorizontalLines(false);
+        Entry73_Table.setShowVerticalLines(false);
+        Entry73_Table.getTableHeader().setReorderingAllowed(false);
+        jScrollPane5.setViewportView(Entry73_Table);
+        if (Entry73_Table.getColumnModel().getColumnCount() > 0) {
+            Entry73_Table.getColumnModel().getColumn(0).setMinWidth(45);
+            Entry73_Table.getColumnModel().getColumn(0).setPreferredWidth(45);
+            Entry73_Table.getColumnModel().getColumn(0).setMaxWidth(45);
+            Entry73_Table.getColumnModel().getColumn(1).setMinWidth(65);
+            Entry73_Table.getColumnModel().getColumn(1).setPreferredWidth(65);
+            Entry73_Table.getColumnModel().getColumn(1).setMaxWidth(65);
+            Entry73_Table.getColumnModel().getColumn(2).setMinWidth(80);
+            Entry73_Table.getColumnModel().getColumn(2).setPreferredWidth(80);
+            Entry73_Table.getColumnModel().getColumn(2).setMaxWidth(80);
+            Entry73_Table.getColumnModel().getColumn(3).setMinWidth(80);
+            Entry73_Table.getColumnModel().getColumn(3).setPreferredWidth(80);
+            Entry73_Table.getColumnModel().getColumn(3).setMaxWidth(80);
+            Entry73_Table.getColumnModel().getColumn(4).setMinWidth(150);
+            Entry73_Table.getColumnModel().getColumn(4).setPreferredWidth(150);
+            Entry73_Table.getColumnModel().getColumn(4).setMaxWidth(150);
+            Entry73_Table.getColumnModel().getColumn(5).setMinWidth(150);
+            Entry73_Table.getColumnModel().getColumn(5).setPreferredWidth(150);
+            Entry73_Table.getColumnModel().getColumn(5).setMaxWidth(150);
+            Entry73_Table.getColumnModel().getColumn(6).setMinWidth(150);
+            Entry73_Table.getColumnModel().getColumn(6).setPreferredWidth(150);
+            Entry73_Table.getColumnModel().getColumn(6).setMaxWidth(150);
+            Entry73_Table.getColumnModel().getColumn(7).setMinWidth(100);
+            Entry73_Table.getColumnModel().getColumn(7).setPreferredWidth(100);
+            Entry73_Table.getColumnModel().getColumn(7).setMaxWidth(100);
+            Entry73_Table.getColumnModel().getColumn(8).setMinWidth(100);
+            Entry73_Table.getColumnModel().getColumn(8).setPreferredWidth(100);
+            Entry73_Table.getColumnModel().getColumn(8).setMaxWidth(100);
+            Entry73_Table.getColumnModel().getColumn(9).setMinWidth(90);
+            Entry73_Table.getColumnModel().getColumn(9).setPreferredWidth(90);
+            Entry73_Table.getColumnModel().getColumn(9).setMaxWidth(90);
+            Entry73_Table.getColumnModel().getColumn(10).setMinWidth(90);
+            Entry73_Table.getColumnModel().getColumn(10).setPreferredWidth(90);
+            Entry73_Table.getColumnModel().getColumn(10).setMaxWidth(90);
+            Entry73_Table.getColumnModel().getColumn(11).setMinWidth(90);
+            Entry73_Table.getColumnModel().getColumn(11).setPreferredWidth(90);
+            Entry73_Table.getColumnModel().getColumn(11).setMaxWidth(90);
+            Entry73_Table.getColumnModel().getColumn(12).setMinWidth(90);
+            Entry73_Table.getColumnModel().getColumn(12).setPreferredWidth(90);
+            Entry73_Table.getColumnModel().getColumn(12).setMaxWidth(90);
+            Entry73_Table.getColumnModel().getColumn(13).setMinWidth(90);
+            Entry73_Table.getColumnModel().getColumn(13).setPreferredWidth(90);
+            Entry73_Table.getColumnModel().getColumn(13).setMaxWidth(90);
+            Entry73_Table.getColumnModel().getColumn(14).setMinWidth(90);
+            Entry73_Table.getColumnModel().getColumn(14).setPreferredWidth(90);
+            Entry73_Table.getColumnModel().getColumn(14).setMaxWidth(90);
+            Entry73_Table.getColumnModel().getColumn(15).setMinWidth(90);
+            Entry73_Table.getColumnModel().getColumn(15).setPreferredWidth(90);
+            Entry73_Table.getColumnModel().getColumn(15).setMaxWidth(90);
+            Entry73_Table.getColumnModel().getColumn(16).setMinWidth(90);
+            Entry73_Table.getColumnModel().getColumn(16).setPreferredWidth(90);
+            Entry73_Table.getColumnModel().getColumn(16).setMaxWidth(90);
+        }
+
+        jPanel4.add(jScrollPane5, java.awt.BorderLayout.CENTER);
+
+        jScrollPane4.setViewportView(jPanel4);
+
+        jTabbedPane1.addTab("7.3", jScrollPane4);
+
+        jPanel6.setPreferredSize(new java.awt.Dimension(1642, 335));
+        jPanel6.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane7.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        Entry71_Table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Index", "SITE", "TIN", "SSS", "Surname", "Firstname", "Midlename", "Date Hired", "Date Separated", "Basic", "Overtime", "Night Differential", "13th Month", "Gov't Contri", "Other Salaries", "Deminimis", "Gross"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        Entry71_Table.setRowHeight(19);
+        Entry71_Table.setShowHorizontalLines(false);
+        Entry71_Table.setShowVerticalLines(false);
+        Entry71_Table.getTableHeader().setReorderingAllowed(false);
+        jScrollPane7.setViewportView(Entry71_Table);
+        if (Entry71_Table.getColumnModel().getColumnCount() > 0) {
+            Entry71_Table.getColumnModel().getColumn(0).setMinWidth(45);
+            Entry71_Table.getColumnModel().getColumn(0).setPreferredWidth(45);
+            Entry71_Table.getColumnModel().getColumn(0).setMaxWidth(45);
+            Entry71_Table.getColumnModel().getColumn(1).setMinWidth(65);
+            Entry71_Table.getColumnModel().getColumn(1).setPreferredWidth(65);
+            Entry71_Table.getColumnModel().getColumn(1).setMaxWidth(65);
+            Entry71_Table.getColumnModel().getColumn(2).setMinWidth(80);
+            Entry71_Table.getColumnModel().getColumn(2).setPreferredWidth(80);
+            Entry71_Table.getColumnModel().getColumn(2).setMaxWidth(80);
+            Entry71_Table.getColumnModel().getColumn(3).setMinWidth(80);
+            Entry71_Table.getColumnModel().getColumn(3).setPreferredWidth(80);
+            Entry71_Table.getColumnModel().getColumn(3).setMaxWidth(80);
+            Entry71_Table.getColumnModel().getColumn(4).setMinWidth(150);
+            Entry71_Table.getColumnModel().getColumn(4).setPreferredWidth(150);
+            Entry71_Table.getColumnModel().getColumn(4).setMaxWidth(150);
+            Entry71_Table.getColumnModel().getColumn(5).setMinWidth(150);
+            Entry71_Table.getColumnModel().getColumn(5).setPreferredWidth(150);
+            Entry71_Table.getColumnModel().getColumn(5).setMaxWidth(150);
+            Entry71_Table.getColumnModel().getColumn(6).setMinWidth(150);
+            Entry71_Table.getColumnModel().getColumn(6).setPreferredWidth(150);
+            Entry71_Table.getColumnModel().getColumn(6).setMaxWidth(150);
+            Entry71_Table.getColumnModel().getColumn(7).setMinWidth(100);
+            Entry71_Table.getColumnModel().getColumn(7).setPreferredWidth(100);
+            Entry71_Table.getColumnModel().getColumn(7).setMaxWidth(100);
+            Entry71_Table.getColumnModel().getColumn(8).setMinWidth(100);
+            Entry71_Table.getColumnModel().getColumn(8).setPreferredWidth(100);
+            Entry71_Table.getColumnModel().getColumn(8).setMaxWidth(100);
+            Entry71_Table.getColumnModel().getColumn(9).setMinWidth(90);
+            Entry71_Table.getColumnModel().getColumn(9).setPreferredWidth(90);
+            Entry71_Table.getColumnModel().getColumn(9).setMaxWidth(90);
+            Entry71_Table.getColumnModel().getColumn(10).setMinWidth(90);
+            Entry71_Table.getColumnModel().getColumn(10).setPreferredWidth(90);
+            Entry71_Table.getColumnModel().getColumn(10).setMaxWidth(90);
+            Entry71_Table.getColumnModel().getColumn(11).setMinWidth(90);
+            Entry71_Table.getColumnModel().getColumn(11).setPreferredWidth(90);
+            Entry71_Table.getColumnModel().getColumn(11).setMaxWidth(90);
+            Entry71_Table.getColumnModel().getColumn(12).setMinWidth(90);
+            Entry71_Table.getColumnModel().getColumn(12).setPreferredWidth(90);
+            Entry71_Table.getColumnModel().getColumn(12).setMaxWidth(90);
+            Entry71_Table.getColumnModel().getColumn(13).setMinWidth(90);
+            Entry71_Table.getColumnModel().getColumn(13).setPreferredWidth(90);
+            Entry71_Table.getColumnModel().getColumn(13).setMaxWidth(90);
+            Entry71_Table.getColumnModel().getColumn(14).setMinWidth(90);
+            Entry71_Table.getColumnModel().getColumn(14).setPreferredWidth(90);
+            Entry71_Table.getColumnModel().getColumn(14).setMaxWidth(90);
+            Entry71_Table.getColumnModel().getColumn(15).setMinWidth(90);
+            Entry71_Table.getColumnModel().getColumn(15).setPreferredWidth(90);
+            Entry71_Table.getColumnModel().getColumn(15).setMaxWidth(90);
+            Entry71_Table.getColumnModel().getColumn(16).setMinWidth(90);
+            Entry71_Table.getColumnModel().getColumn(16).setPreferredWidth(90);
+            Entry71_Table.getColumnModel().getColumn(16).setMaxWidth(90);
+        }
+
+        jPanel6.add(jScrollPane7, java.awt.BorderLayout.CENTER);
+
+        jScrollPane6.setViewportView(jPanel6);
+
+        jTabbedPane1.addTab("7.1", jScrollPane6);
+
+        jScrollPane10.setPreferredSize(new java.awt.Dimension(1227, 337));
+
+        jPanel10.setPreferredSize(new java.awt.Dimension(1225, 335));
+        jPanel10.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane11.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        EntryAll_Table.setAutoCreateRowSorter(true);
+        EntryAll_Table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Schedule", "Index", "TIN", "SSS", "Surname", "Firstname", "Midlename", "Entry Validation", "DB Validation"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        EntryAll_Table.setRowHeight(19);
+        EntryAll_Table.setShowHorizontalLines(false);
+        EntryAll_Table.setShowVerticalLines(false);
+        EntryAll_Table.getTableHeader().setReorderingAllowed(false);
+        jScrollPane11.setViewportView(EntryAll_Table);
+        if (EntryAll_Table.getColumnModel().getColumnCount() > 0) {
+            EntryAll_Table.getColumnModel().getColumn(0).setMinWidth(100);
+            EntryAll_Table.getColumnModel().getColumn(0).setPreferredWidth(100);
+            EntryAll_Table.getColumnModel().getColumn(0).setMaxWidth(100);
+            EntryAll_Table.getColumnModel().getColumn(1).setMinWidth(65);
+            EntryAll_Table.getColumnModel().getColumn(1).setPreferredWidth(65);
+            EntryAll_Table.getColumnModel().getColumn(1).setMaxWidth(65);
+            EntryAll_Table.getColumnModel().getColumn(2).setMinWidth(80);
+            EntryAll_Table.getColumnModel().getColumn(2).setPreferredWidth(80);
+            EntryAll_Table.getColumnModel().getColumn(2).setMaxWidth(80);
+            EntryAll_Table.getColumnModel().getColumn(3).setMinWidth(80);
+            EntryAll_Table.getColumnModel().getColumn(3).setPreferredWidth(80);
+            EntryAll_Table.getColumnModel().getColumn(3).setMaxWidth(80);
+            EntryAll_Table.getColumnModel().getColumn(4).setMinWidth(200);
+            EntryAll_Table.getColumnModel().getColumn(4).setPreferredWidth(200);
+            EntryAll_Table.getColumnModel().getColumn(4).setMaxWidth(200);
+            EntryAll_Table.getColumnModel().getColumn(5).setMinWidth(200);
+            EntryAll_Table.getColumnModel().getColumn(5).setPreferredWidth(200);
+            EntryAll_Table.getColumnModel().getColumn(5).setMaxWidth(200);
+            EntryAll_Table.getColumnModel().getColumn(6).setMinWidth(200);
+            EntryAll_Table.getColumnModel().getColumn(6).setPreferredWidth(200);
+            EntryAll_Table.getColumnModel().getColumn(6).setMaxWidth(200);
+            EntryAll_Table.getColumnModel().getColumn(7).setMinWidth(150);
+            EntryAll_Table.getColumnModel().getColumn(7).setPreferredWidth(150);
+            EntryAll_Table.getColumnModel().getColumn(7).setMaxWidth(150);
+            EntryAll_Table.getColumnModel().getColumn(8).setMinWidth(150);
+            EntryAll_Table.getColumnModel().getColumn(8).setPreferredWidth(150);
+            EntryAll_Table.getColumnModel().getColumn(8).setMaxWidth(150);
+        }
+
+        jPanel10.add(jScrollPane11, java.awt.BorderLayout.CENTER);
+
+        jScrollPane10.setViewportView(jPanel10);
+
+        jTabbedPane1.addTab("All Entries", jScrollPane10);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 830, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(ProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton4)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton3)
-                        .addComponent(jButton4)
-                        .addComponent(jButton1))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton2))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -170,28 +581,29 @@ public class EntryUI extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-       try{
-           Verify2316Process fp = new Verify2316Process(this);
+        try {
+            Verify2316Process fp = new Verify2316Process(this);
             TRD = new Thread(fp);
             TRD.start();
-       }catch(Exception er){
-           er.printStackTrace();
-       }
-        
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        try{
-            Fetch2316Process fp = new Fetch2316Process("D:\\testverify.xlsb",this);
+        if (selectImport()) {
+            Fetch2316Process fp = new Fetch2316Process(EntryFile.getAbsolutePath(), this);
+            jTextField1.setText(EntryFile.getAbsolutePath());
             TRD = new Thread(fp);
             TRD.start();
-        }catch(Exception er){
-            er.printStackTrace();
+            jButton3.setEnabled(true);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -231,15 +643,33 @@ public class EntryUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public javax.swing.JTable EntryTable;
+    public javax.swing.JTable Entry71_Table;
+    public javax.swing.JTable Entry73_Table;
+    public javax.swing.JTable Entry75a_Table;
+    public javax.swing.JTable Entry75i_Table;
+    public javax.swing.JTable EntryAll_Table;
     public javax.swing.JProgressBar ProgressBar;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    public javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
