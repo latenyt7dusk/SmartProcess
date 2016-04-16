@@ -15,7 +15,7 @@ import nakpil.proccess.Verify2316Process;
 /**
  *
  * @author HERU
- */
+ *///
 public class EntryUI extends javax.swing.JFrame {
 
     public static Thread TRD;
