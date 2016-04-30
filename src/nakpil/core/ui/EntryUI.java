@@ -22,7 +22,7 @@ public class EntryUI extends javax.swing.JFrame {
     public static DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
     public static DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
     public static DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-    private static JFileChooser FileChooser = new JFileChooser();
+    private static final JFileChooser FileChooser = new JFileChooser();
     private static File EntryFile;
     private static String ewan = "ewan";
 
